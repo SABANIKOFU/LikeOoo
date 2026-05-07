@@ -10,6 +10,7 @@ public class GrowBlink : MonoBehaviour
     public bool isKnockBucked;
     private bool isBreakBlock;
     public bool isCollideBlock;
+    private bool get_away;
 
     [Header("スロー設定")]
     [SerializeField] private float slowTimeScale = 0.2f;
@@ -60,13 +61,15 @@ public class GrowBlink : MonoBehaviour
         // 地面にいるときとすべり落ち状態以外は巨大化できないようにする
         if (!basicOps.isGround && !basicOps.isPushingWall)
         {
+            get_away = true;
             ResetSlow();
             return;
         }
 
-            // 左クリックを入力中
-            if (Input.GetMouseButtonDown(0))
+        // 左クリックを入力中
+        if (Input.GetMouseButtonDown(0))
         {
+            get_away = false;
             // 時間の流れを変える
             // 物理演算の計算間隔を１秒に50回にするためにfixedDeltaTimeも変える
             Time.timeScale = slowTimeScale;
@@ -77,7 +80,7 @@ public class GrowBlink : MonoBehaviour
         }
 
         // 左クリックを離したとき
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(0) && !get_away)
         {
             // 時間の流れ・物理演算の間隔を戻す
             Time.timeScale = 1f;
