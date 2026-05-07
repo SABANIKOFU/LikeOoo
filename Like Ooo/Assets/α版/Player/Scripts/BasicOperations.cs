@@ -25,7 +25,7 @@ public class BasicOperations : MonoBehaviour
     [Header("プレイヤーの移動設定")]
     private float inputDir;
     [SerializeField] private float moveSpeed = 8f;
-    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float coyoteTime = 0.2f;
     [SerializeField] private float coyoteTimeCounter = 0f;
     [SerializeField] private float jumpBufferTime = 0.1f;
@@ -383,6 +383,9 @@ public class BasicOperations : MonoBehaviour
     void Jump()
     {
         isJumpping = false;
+
+        float gravity = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
+        float jumpForce = Mathf.Sqrt(2f * gravity * jumpHeight);
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     }

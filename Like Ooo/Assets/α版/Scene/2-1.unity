@@ -15081,6 +15081,10 @@ PrefabInstance:
       propertyPath: 'itemList.Array.data[1]'
       value: 
       objectReference: {fileID: 1652004518}
+    - target: {fileID: 1852947221444105778, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
+      propertyPath: jumpHeight
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
