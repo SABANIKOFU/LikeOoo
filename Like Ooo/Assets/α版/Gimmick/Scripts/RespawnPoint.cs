@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class RespawnPoint : MonoBehaviour
 {
+    [Header("アイテム取得設定")]
+    public GameObject giveItem;
+    public int giveItemNumber;
+    private GetItem getItem;
+
     [Header("見た目の設定")]
     public Color inactiveColor = Color.gray;
     public Color activeColor = Color.yellow;
@@ -24,7 +29,7 @@ public class RespawnPoint : MonoBehaviour
         OnAnyCheckpointActivated += HandleAnyCheckpointActivated;
     }
 
-    // イベントの購読解除（聞き取り終了）
+    // イベントの購読解除
     private void OnDisable()
     {
         OnAnyCheckpointActivated -= HandleAnyCheckpointActivated;
@@ -40,18 +45,39 @@ public class RespawnPoint : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // すでにアクティブなら戻る
+        if (isActive) return; 
+
         if (collision.CompareTag("Player"))
         {
-            // プレイヤーの復活地点をこのオブジェクトの位置に更新
-            BasicOperations player = collision.GetComponent<BasicOperations>();
-            if (player != null)
+            GameObject player = collision.gameObject;
+
+            //============================================================//
+            //     プレイヤーの復活地点をこのオブジェクトの位置に更新     //
+            //============================================================//
+            BasicOperations basicOps = player.GetComponent<BasicOperations>();
+            if (basicOps != null)
             {
                 // オブジェクトの中心位置を復活地点として登録
-                player.SetSpawnPoint(transform.position);
-
-                // 視覚的なフィードバック
-                ActivateCheckpoint();
+                basicOps.SetSpawnPoint(transform.position);
             }
+
+            //============================================================//
+            //     プレイヤーにアイテムを与える                           //
+            //============================================================//
+            getItem = player.GetComponent<GetItem>();
+
+            // アイテムが登録されていないまたはgetItemが取得できないなら戻る
+            if (giveItem != null && getItem != null)
+            {
+                for (int i = 0; i < giveItemNumber; i++)
+                {
+                    getItem.PushItem(giveItem);
+                }
+            }
+
+            // 視覚的なフィードバック
+            ActivateCheckpoint();
         }
     }
 

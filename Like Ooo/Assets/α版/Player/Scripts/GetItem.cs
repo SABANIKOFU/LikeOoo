@@ -50,25 +50,30 @@ public class GetItem : MonoBehaviour
         }
     }
 
+    public void PushItem(GameObject item)
+    {
+        // インベントリの上限に達していたら戻る
+        if (inventory.Count >= maxInventory)
+        {
+            Debug.Log("インベントリがいっぱいです");
+            return;
+        }
+
+        inventory.Push(item);
+        Debug.Log("アイテムを取得しました");
+
+        // アイテムをオフにする
+        item.SetActive(false);
+
+        IdentifyItem();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // 衝突した相手がアイテムならスタックに入れる
         if (collision.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
-            // インベントリの上限に達していたら戻る
-            if (inventory.Count >= maxInventory)
-            {
-                Debug.Log("インベントリがいっぱいです");
-                return;
-            }
-
-            inventory.Push(collision.gameObject);
-            Debug.Log("アイテムを取得しました");
-
-            // アイテムをオフにする
-            collision.gameObject.SetActive(false);
-
-            IdentifyItem();
+            PushItem(collision.gameObject);
         }
 
         // 現在のステージのRoomTriggerを取得する

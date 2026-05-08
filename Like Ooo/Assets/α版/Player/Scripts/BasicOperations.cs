@@ -101,7 +101,7 @@ public class BasicOperations : MonoBehaviour
         // リスタート
         if (Input.GetKeyDown(KeyCode.R))
         {
-            transform.position = lastSpawnPoint;
+            Die();
             // イベントを放送する
             OnPlayerRespawn?.Invoke();
         }
@@ -246,7 +246,29 @@ public class BasicOperations : MonoBehaviour
         if (collision.gameObject.CompareTag("Damage"))
         {
             Debug.Log("Playerがトゲに当たりました");
+
+            // ブリンクアイテムを所持していたら跳ねる
+            if(getItem.canGrow)
+            {
+                Jump();
+                return;
+            }
+
             Die();
+        }
+    }
+
+    // ブリンクアイテムを持っているときにトゲに当たってジャンプした後にすぐにアイテムを消費すると
+    // OnCollisionEnter2Dがすぐに反応してDie関数が呼ばれるので離れた瞬間にアイテムを消費するようにする
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Damage"))
+        {
+            if (getItem.canGrow)
+            {
+                // アイテムを消費する。
+                getItem.UseGrowItem();
+            }
         }
     }
 
