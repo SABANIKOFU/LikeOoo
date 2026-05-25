@@ -55,12 +55,12 @@ public class GetItem : MonoBehaviour
         // インベントリの上限に達していたら戻る
         if (inventory.Count >= maxInventory)
         {
-            Debug.Log("インベントリがいっぱいです");
+            DebugUtil.Log("インベントリがいっぱいです");
             return;
         }
 
         inventory.Push(item);
-        Debug.Log("アイテムを取得しました");
+        DebugUtil.Log("アイテムを取得しました");
 
         // アイテムをオフにする
         item.SetActive(false);
@@ -94,11 +94,11 @@ public class GetItem : MonoBehaviour
     // ステージ内のアイテムをすべてオンにする
     void ResetItem()
     {
-        Debug.Log("リセット関数突入");
+        DebugUtil.Log("リセット関数突入");
         foreach (GameObject item in roomTrigger.stageItemes)
         {
             item.SetActive(true);
-            Debug.Log("アイテムを戻しました");
+            DebugUtil.Log("アイテムを戻しました");
         }
     }
     void ResetFlag()
@@ -126,7 +126,7 @@ public class GetItem : MonoBehaviour
             if (id.data.itemType == ItemType.Grow)
             {
                 canGrow = true;
-                Debug.Log("巨大化アイテムでした");
+                DebugUtil.Log("巨大化アイテムでした");
             }
             //==================================//
             //     アイテムが増えるごとに追加   //
@@ -134,7 +134,7 @@ public class GetItem : MonoBehaviour
             else if (id.data.itemType == ItemType.White)
             {
                 isWhite = true;
-                Debug.Log("白いアイテムでした");
+                DebugUtil.Log("白いアイテムでした");
             }
         }
     }

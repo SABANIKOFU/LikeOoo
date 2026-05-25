@@ -252,7 +252,7 @@ public class GrowBlink : MonoBehaviour
 
             if (basicOps.rb.linearVelocity.sqrMagnitude < 0.5f)
             {
-                Debug.Log("壁に激突して停止しました");
+                DebugUtil.Log("壁に激突して停止しました");
                 isKnockBucked = false;
                 break;
             }

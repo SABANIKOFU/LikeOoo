@@ -11,13 +11,13 @@ public class ItemIdentifier : MonoBehaviour
         // ItemDataが設定されていない場合、警告を出す
         if (data == null)
         {
-            Debug.LogWarning("ItemDataが設定されていません: " + gameObject.name);
+            DebugUtil.LogWarning("ItemDataが設定されていません: " + gameObject.name);
         }
 
         // アイテムのタイプがNoneの場合、警告を出す
         if (data != null && data.itemType == ItemType.None)
         {
-            Debug.LogWarning("ItemTypeがNoneに設定されています: " + gameObject.name);
+            DebugUtil.LogWarning("ItemTypeがNoneに設定されています: " + gameObject.name);
         }
     }
 }

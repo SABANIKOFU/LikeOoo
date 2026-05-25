@@ -60,22 +60,21 @@ public class MoveBlock : MonoBehaviour
     {
         CheckGround();
         CheckSurroundsPlayer();
-        
+
         // 吹っ飛び中でない時だけ、状態に合わせて物理挙動を切り替える
-        if (!isKnockBucking)
+        if (isKnockBucking) return;
+
+        // 「上にプレイヤーがいる ＆ 接地している」条件
+        if (isGround && isPlayerOnTop)
         {
-            // 「上にプレイヤーがいる ＆ 接地している」条件
-            if (isGround && isPlayerOnTop)
-            {
-                // 動かざる石（完全な足場）にする
-                rb.bodyType = RigidbodyType2D.Kinematic;
-                rb.linearVelocity = Vector2.zero;
-            }
-            else
-            {
-                // それ以外の時は重力や物理演算を有効にする
-                rb.bodyType = RigidbodyType2D.Dynamic;
-            }
+            // 動かざる石（完全な足場）にする
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.linearVelocity = Vector2.zero;
+        }
+        else
+        {
+            // それ以外の時は重力や物理演算を有効にする
+            rb.bodyType = RigidbodyType2D.Dynamic;
         }
     }
 
@@ -113,7 +112,7 @@ public class MoveBlock : MonoBehaviour
         RaycastHit2D hitLeft = Physics2D.BoxCast(transform.position, verticalBoxSize, 0f, Vector2.left, boxRayDistance, playerLayer);
         RaycastHit2D hitRight = Physics2D.BoxCast(transform.position, verticalBoxSize, 0f, Vector2.right, boxRayDistance, playerLayer);
 
-        if(hitRight.collider != null)
+        if (hitRight.collider != null)
         {
             player = hitRight.collider.gameObject;
         }
@@ -121,11 +120,11 @@ public class MoveBlock : MonoBehaviour
         {
             player = hitLeft.collider.gameObject;
         }
-        else if(hitUp.collider != null)
+        else if (hitUp.collider != null)
         {
             player = hitUp.collider.gameObject;
         }
-        else if(hitDown.collider != null)
+        else if (hitDown.collider != null)
         {
             player = hitDown.collider.gameObject;
         }
@@ -134,13 +133,13 @@ public class MoveBlock : MonoBehaviour
         if (player != null && basicOps == null)
         {
             basicOps = player.GetComponent<BasicOperations>();
-            Debug.Log("スクリプトを取得しました");
+            DebugUtil.Log("スクリプトを取得しました");
         }
     }
 
     public void CalcMoveDir(Transform playerTransform)
     {
-        Debug.Log("動く方向計算開始");
+        DebugUtil.Log("動く方向計算開始");
 
 
         // プレイヤーから見たこのオブジェクトの方向のみを計算
@@ -158,7 +157,7 @@ public class MoveBlock : MonoBehaviour
             // Yの方が大きい（縦長）なので、上下のどちらかに確定
             // 上(1)か下(-1)かを判定する
             moveDir = new Vector2(0f, Mathf.Sign(direction.y));
-            
+
         }
 
         // 吹っ飛ばしコルーチン
@@ -167,19 +166,19 @@ public class MoveBlock : MonoBehaviour
 
     private void DeletePhsics()
     {
-        if(isKnockBucking)
+        if (isKnockBucking)
         {
-           
+
         }
         else
         {
-           
+
         }
     }
 
     private IEnumerator KnockBuckBlock()
     {
-        Debug.Log("吹き飛ばされ開始");
+        DebugUtil.Log("吹き飛ばされ開始");
 
         if (moveDir == Vector2.zero) yield break;
 
@@ -195,7 +194,7 @@ public class MoveBlock : MonoBehaviour
 
         if (moveDir.y < 0 && isGround)
         {
-            Debug.Log("地面に叩きつけられようとしています。固定化して物理干渉を消します。");
+            DebugUtil.Log("地面に叩きつけられようとしています。固定化して物理干渉を消します。");
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             rb.bodyType = RigidbodyType2D.Kinematic;
             isKnockBucking = false;
@@ -222,7 +221,7 @@ public class MoveBlock : MonoBehaviour
         // 完全に止める
         rb.linearVelocity = Vector2.zero;
 
-        
+
         // 重力を反映させるためX軸とZ軸だけ固定する
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 

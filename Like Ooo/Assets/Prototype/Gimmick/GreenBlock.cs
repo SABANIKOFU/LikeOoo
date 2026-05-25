@@ -56,7 +56,7 @@ public class GreenBlock : MonoBehaviour, IInteractableBlock
         // 水平方向のみに力を加える
         rb.AddForce(horizontalForceDir * force, ForceMode2D.Impulse);
 
-        Debug.Log("Green Block Knocked Back Horizontally!");
+        DebugUtil.Log("Green Block Knocked Back Horizontally!");
 
         StopAllCoroutines();
         StartCoroutine(LockWhenStopped());

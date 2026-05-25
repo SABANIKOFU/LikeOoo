@@ -25,7 +25,7 @@ public class EraceBlock : MonoBehaviour
 
     public void Erace()
     {
-        Debug.Log("消える関数突入");
+        DebugUtil.Log("消える関数突入");
 
         isErace = true;
 
@@ -66,7 +66,7 @@ public class EraceBlock : MonoBehaviour
 
     private IEnumerator ReSpawnBlock()
     {
-        Debug.Log("リスポーンコルーチン突入");
+        DebugUtil.Log("リスポーンコルーチン突入");
 
         yield return new WaitForSeconds(respawnTime);
 
@@ -81,7 +81,7 @@ public class EraceBlock : MonoBehaviour
 
     private void CheckPlayerOverlap()
     {
-        Debug.Log("範囲内にプレイヤーがいるか確認");
+        DebugUtil.Log("範囲内にプレイヤーがいるか確認");
 
         // 自分のBoxColliderと同じサイズと位置で重なりをチェック
         Vector2 size = boxCollider.size * transform.localScale * 0.9f;
@@ -93,7 +93,7 @@ public class EraceBlock : MonoBehaviour
             BasicOperations player = hit.GetComponent<BasicOperations>();
             if (player != null)
             {
-                Debug.Log("ブロックに押しつぶされました！");
+                DebugUtil.Log("ブロックに押しつぶされました！");
                 player.Die();
             }
         }

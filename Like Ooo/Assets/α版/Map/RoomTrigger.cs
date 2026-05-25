@@ -31,7 +31,8 @@ public class RoomTrigger : MonoBehaviour
         // プレイヤーが部屋に入ったら、CameraControllerに新しい位置とサイズを渡す
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("プレイヤー発見");
+            //DebugLog.Util("プレイヤー発見");
+            DebugUtil.Log("プレイヤー発見");
             if (CameraController.Instance != null)
             {
                 // コライダーのワールド空間での中心座標を取得してカメラに渡す
@@ -53,7 +54,7 @@ public class RoomTrigger : MonoBehaviour
 
             // ステージアイテムをリストに入れる
             stageItemes.Add(collision.gameObject);
-            Debug.Log("アイテムを追加します");
+            DebugUtil.Log("アイテムを追加します");
         }
     }
 

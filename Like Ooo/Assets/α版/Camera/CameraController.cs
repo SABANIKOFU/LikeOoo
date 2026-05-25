@@ -63,6 +63,6 @@ public class CameraController : MonoBehaviour
 
         MoveCamera?.Invoke();
 
-        Debug.Log("カメラが動きました");
+        DebugUtil.Log("カメラが動きました");
     }
 }

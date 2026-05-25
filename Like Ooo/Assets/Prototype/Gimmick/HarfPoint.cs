@@ -40,7 +40,7 @@ public class HarfPoint : MonoBehaviour
         isActive = true;
 
         if (sr != null) sr.color = activeColor;
-        Debug.Log("Respawn Point Activated!");
+        DebugUtil.Log("Respawn Point Activated!");
 
         // 他のチェックポイントを非アクティブにしたい場合は、ここで通知を送る処理を追加可能
     }

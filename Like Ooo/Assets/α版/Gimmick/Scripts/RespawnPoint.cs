@@ -87,7 +87,7 @@ public class RespawnPoint : MonoBehaviour
         isActive = true;
 
         if (sr != null) sr.color = activeColor;
-        Debug.Log("Respawn Point Activated!");
+        DebugUtil.Log("Respawn Point Activated!");
 
         // アクティブになったことを放送する
         OnAnyCheckpointActivated?.Invoke(this);

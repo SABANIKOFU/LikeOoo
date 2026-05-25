@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
     public void SetSpawnPoint(Vector2 position)
     {
         lastSpawnPoint = position;
-        Debug.Log("Spawn Point Updated: " + position);
+        DebugUtil.Log("Spawn Point Updated: " + position);
     }
 
     // ダメージ床への接触判定
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        Debug.Log("Player Died");
+        DebugUtil.Log("Player Died");
 
         // 動きを止める
         rb.linearVelocity = Vector2.zero;
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
         // 【追加】復活した瞬間にイベントを発行し、登録されている処理を全て実行する
         OnPlayerRespawn?.Invoke();
 
-        Debug.Log("Player Respawned");
+        DebugUtil.Log("Player Respawned");
     }
     private void CheckSurroundings()
     {

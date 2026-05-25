@@ -245,7 +245,7 @@ public class BasicOperations : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Damage"))
         {
-            Debug.Log("Playerがトゲに当たりました");
+            DebugUtil.Log("Playerがトゲに当たりました");
 
             // ブリンクアイテムを所持していたら跳ねる
             if(getItem.canGrow)
@@ -288,7 +288,7 @@ public class BasicOperations : MonoBehaviour
         if (spriteRenderer != null) spriteRenderer.color = Color.red;
 
 
-        Debug.Log("Player Died");
+        DebugUtil.Log("Player Died");
 
         StartCoroutine(RespawnRoutine());
     }
@@ -296,7 +296,7 @@ public class BasicOperations : MonoBehaviour
     public void SetSpawnPoint(Vector2 position)
     {
         lastSpawnPoint = position;
-        Debug.Log("Spawn Point Updated: " + position);
+        DebugUtil.Log("Spawn Point Updated: " + position);
     }
 
     private IEnumerator RespawnRoutine()
@@ -322,7 +322,7 @@ public class BasicOperations : MonoBehaviour
         // イベントを放送する
         OnPlayerRespawn?.Invoke();
 
-        Debug.Log("Player Respawned");
+        DebugUtil.Log("Player Respawned");
     }
 
     // 方向と距離を渡すとプレイヤーからその方向にその距離BoxCastを飛ばして指定のLayerを探す
@@ -437,7 +437,7 @@ public class BasicOperations : MonoBehaviour
         // 前のフレームのY軸上の速度が正/現在のフレームが負なら頂点だと推測できる
         if (previousVelocityY > 0f && currentVelocityY <= 0f)
         {
-            Debug.Log("ジャンプの頂点に達しました");
+            DebugUtil.Log("ジャンプの頂点に達しました");
             if (reduceGravityCoroutine != null) StopCoroutine(reduceGravityCoroutine);
             reduceGravityCoroutine = StartCoroutine(ReduceGravity());
         }
@@ -492,7 +492,7 @@ public class BasicOperations : MonoBehaviour
         {
             // ジャンプ入力を消費して、二重ジャンプを防ぐ
             jumpBufferCounter = 0f;
-            Debug.Log("よじ登り成功");
+            DebugUtil.Log("よじ登り成功");
             if (Dir == Vector2.right)
             {
                 // 現在地によじ登り後の速度を足す
