@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BasicOperations : MonoBehaviour
 {
@@ -30,6 +31,9 @@ public class BasicOperations : MonoBehaviour
     [SerializeField] private float coyoteTimeCounter = 0f;
     [SerializeField] private float jumpBufferTime = 0.1f;
     [SerializeField] private float jumpBufferCounter = 0f;
+    // Input Systemでの入力アクション
+    private InputAction moveAction;
+    private InputAction jumpAction;
 
     public float realGravity;
     private float previousVelocityY;
@@ -90,6 +94,9 @@ public class BasicOperations : MonoBehaviour
         originalColor = spriteRenderer.color;
         realGravity = rb.gravityScale;
         lastSpawnPoint = transform.position;
+
+        moveAction = InputSystem.actions.FindAction("Move");
+        jumpAction = InputSystem.actions.FindAction("Jump");
     }
 
     // Update is called once per frame
@@ -97,22 +104,7 @@ public class BasicOperations : MonoBehaviour
     {
         CheckSurroundings();
         JumpBuffer();
-
-        // リスタート
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Die();
-            // イベントを放送する
-            OnPlayerRespawn?.Invoke();
-        }
-
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            if (!getItem.isWhite) return;
-
-            getItem.UseWhiteItem();
-        }
-
+        
         //====================================================================//
         //     地面時の時                                                     //
         //====================================================================//
@@ -122,13 +114,13 @@ public class BasicOperations : MonoBehaviour
             isPushingWall = false;
 
             // 左右入力の検知だけはUpdateで行い、操作の感度を上げる
-            inputDir = InputHorizontalMove();
+            inputDir = moveAction.ReadValue<Vector2>().x;
 
             // コヨーテタイムが残っている限りジャンプできる
             if (coyoteTimeCounter > 0)
             {
                 // ジャンプの先行入力がある時に即ジャンプを実行する
-                if (Input.GetKeyDown(KeyCode.Space) || jumpBufferCounter > 0)
+                if (jumpAction.WasPressedThisFrame() || jumpBufferCounter > 0)
                 {
                     isJumpping = true;
                     coyoteTimeCounter = 0f;
@@ -146,7 +138,7 @@ public class BasicOperations : MonoBehaviour
         else if (currentState == STATE.AIRBORNE)
         {
             // 空中での横移動とすべり落ち検知に使う
-            inputDir = InputHorizontalMove();
+            inputDir = moveAction.ReadValue<Vector2>().x;
 
             // ステート変更
             if (growBlink.isGrow) currentState = STATE.GROWING;
@@ -226,6 +218,22 @@ public class BasicOperations : MonoBehaviour
                 canClimb = false;
             }
         }
+    }
+
+    // アイテム使用
+    private void OnUseItem(InputValue inputValue)
+    {
+        if (!getItem.isWhite) return;
+
+        getItem.UseWhiteItem();
+    }
+
+    // リトライ
+    private void OnRetry(InputValue inputValue)
+    {
+        Die();
+        // イベントを放送する
+        OnPlayerRespawn?.Invoke();
     }
 
     private void AdjustCollider()
@@ -356,14 +364,6 @@ public class BasicOperations : MonoBehaviour
         }
     }
 
-    float InputHorizontalMove()
-    {
-        // 左右入力を検知
-        float inputMove = Input.GetAxisRaw("Horizontal");
-
-        return inputMove;
-    }
-
     void UpdateHorizontalMove(float inputMove)
     {
         float velocity_x = inputMove * moveSpeed;
@@ -415,7 +415,7 @@ public class BasicOperations : MonoBehaviour
     void JumpBuffer()
     {
         // ジャンプの先行入力を実行する最大時間を代入
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (jumpAction.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferTime;
         }

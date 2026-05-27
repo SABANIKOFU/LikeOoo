@@ -11,6 +11,8 @@ public class RoomTrigger : MonoBehaviour
 
     private BoxCollider2D col;
 
+    private bool hasLoggedPlayer;   // プレイヤーが部屋に入ったことを一度だけログに出すためのフラグ
+
     [Header("ステージ内のアイテム")]
     public List<GameObject> stageItemes;
 
@@ -31,8 +33,12 @@ public class RoomTrigger : MonoBehaviour
         // プレイヤーが部屋に入ったら、CameraControllerに新しい位置とサイズを渡す
         if (collision.CompareTag("Player"))
         {
-            //DebugLog.Util("プレイヤー発見");
-            DebugUtil.Log("プレイヤー発見");
+            if (!hasLoggedPlayer)
+            {
+                DebugUtil.Log("プレイヤー発見");
+                hasLoggedPlayer = true;
+            }
+
             if (CameraController.Instance != null)
             {
                 // コライダーのワールド空間での中心座標を取得してカメラに渡す
@@ -40,6 +46,15 @@ public class RoomTrigger : MonoBehaviour
 
                 CameraController.Instance.MoveToRoom(centerPosition, cameraSize);
             }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        // プレイヤーが部屋から出たら、フラグをリセットして次回入ったときにログを出すようにする
+        if (collision.CompareTag("Player"))
+        {
+            hasLoggedPlayer = false;
         }
     }
 
@@ -72,7 +87,5 @@ public class RoomTrigger : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(gizmoCol.bounds.center, 0.5f);
         }
-    }
-
-    
+    }  
 }

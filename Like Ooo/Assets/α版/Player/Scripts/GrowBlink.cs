@@ -2,6 +2,8 @@ using System.Collections;
 using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System;
 
 public class GrowBlink : MonoBehaviour
 {
@@ -20,7 +22,6 @@ public class GrowBlink : MonoBehaviour
     [SerializeField] private GameObject growPlayer;
     [SerializeField] private float growTime = 0.1f; // 巨大化の時間
 
-
     [Header("ブリンク設定")]
     private Vector2 knockbuckDir;
     [SerializeField] private float knockbuckForce = 10f;
@@ -37,11 +38,42 @@ public class GrowBlink : MonoBehaviour
     private MoveBlock moveBlock;
     private EraceBlock eraceBlock;
 
+    private InputAction growAction; // Input Systemでの巨大化アクション
 
+    [Header("デバッグ用")]
+    [SerializeField] private bool debugMode = false;
+    private Func<bool> canGrowCheck;   // 巨大化できるかの条件を判定する関数
+    private Func<bool> canReleaseCheck; // 巨大化を解除できるかの条件を判定する関数
+
+    private void Awake()
+    {
+        if (debugMode)
+        {
+            canGrowCheck = () => true;
+            canReleaseCheck = () => true;
+        }
+        else
+        {
+            canGrowCheck = () =>
+            {
+                if (!basicOps.isGround && !basicOps.isPushingWall)
+                {
+                    get_away = true;
+                    ResetSlow();
+                    return false;
+                }
+                return true;
+            };
+
+            canReleaseCheck = () => !get_away;
+        }
+    }
     void Start()
     {
         basicOps = GetComponent<BasicOperations>();
         getItem = GetComponent<GetItem>();
+
+        growAction = InputSystem.actions.FindAction("Grow");
     }
 
     void Update()
@@ -59,15 +91,10 @@ public class GrowBlink : MonoBehaviour
         if (isGrow || getItem.canGrow == false) return;
 
         // 地面にいるときとすべり落ち状態以外は巨大化できないようにする
-        if (!basicOps.isGround && !basicOps.isPushingWall)
-        {
-            get_away = true;
-            ResetSlow();
-            return;
-        }
+        if (!canGrowCheck()) return;
 
-        // 左クリックを入力中
-        if (Input.GetMouseButtonDown(0))
+        // growActionを入力中
+        if (growAction.WasPressedThisFrame())
         {
             get_away = false;
             // 時間の流れを変える
@@ -79,8 +106,8 @@ public class GrowBlink : MonoBehaviour
             if (slowTimeMask != null) slowTimeMask.SetActive(true);
         }
 
-        // 左クリックを離したとき
-        if(Input.GetMouseButtonUp(0) && !get_away)
+        // growActonを離したとき
+        if (growAction.WasReleasedThisFrame() && canReleaseCheck())
         {
             // 時間の流れ・物理演算の間隔を戻す
             Time.timeScale = 1f;

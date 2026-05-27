@@ -15649,6 +15649,10 @@ PrefabInstance:
       value: NewPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 1424476494158636951, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
+      propertyPath: debugMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1424476494158636951, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
       propertyPath: slowTimeMask
       value: 
       objectReference: {fileID: 1100946591}
@@ -15667,6 +15671,26 @@ PrefabInstance:
     - target: {fileID: 1852947221444105778, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
       propertyPath: jumpHeight
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852947221444105778, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
+      propertyPath: jumpAction.m_Name
+      value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852947221444105778, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
+      propertyPath: moveAction.m_Name
+      value: Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852947221444105778, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
+      propertyPath: moveAction.m_SingletonActionBindings.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852947221444105778, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
+      propertyPath: moveAction.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 0ff9da17-dd70-407f-b6c0-9f8b4ecca0ba
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852947221444105778, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
+      propertyPath: moveAction.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Move
       objectReference: {fileID: 0}
     - target: {fileID: 3454274834167753423, guid: 89ad9b4a555ec2745a8cd05b8af2c737, type: 3}
       propertyPath: m_SortingOrder
